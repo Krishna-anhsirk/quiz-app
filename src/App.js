@@ -1,4 +1,8 @@
+import { useState } from "react";
+
 function App() {
+  const [questionNo, setQuestionNo] = useState(0);
+  const [score, setScore] = useState(0);
   const questions = [
     {
       questionText: "What is the capital of France?",
@@ -38,29 +42,42 @@ function App() {
     },
   ];
 
+  const handleOptionClick = (isCorrect) => {
+    if (isCorrect) {
+      setScore(score + 1);
+    }
+    setQuestionNo(questionNo + 1);
+  };
+
   return (
     <div className="app">
       {/* HINT: replace "false" with logic to display the 
       score when the user has answered all the questions */}
-      {false ? (
+      {questionNo > questions.length - 1 ? (
         <div className="score-section">
-          You scored 1 out of {questions.length}
+          You scored {score} out of {questions.length}
         </div>
       ) : (
         <>
           <div className="question-section">
             <div className="question-count">
-              <span>Question 1</span>/{questions.length}
+              <span>Question {questionNo + 1} </span>/{questions.length}
             </div>
             <div className="question-text">
-              This is where the question text should go
+              {questions[questionNo].questionText}
             </div>
           </div>
           <div className="answer-section">
-            <button>Answer 1</button>
-            <button>Answer 2</button>
-            <button>Answer 3</button>
-            <button>Answer 4</button>
+            {questions[questionNo].answerOptions.map((option) => {
+              return (
+                <button
+                  onClick={() => handleOptionClick(option.isCorrect)}
+                  key={option.answerText}
+                >
+                  {option.answerText}
+                </button>
+              );
+            })}
           </div>
         </>
       )}
